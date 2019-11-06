@@ -1,22 +1,35 @@
-function checaIdade(idade)
-{
-    return new Promise(function(resolve, reject)
-    {
-        if(idade > 18)
-        {
-            resolve();
-        }
-        else{
-            reject();
-        }
-    });
+var listElement = document.querySelector('#app ul');
+var inputElement = document.querySelector('#app input');
+var buttonElement = document.querySelector('#app button');
+
+var repos = [];
+
+function renderRepos(){
+    listElement.innerHTML = '';
+    for (repo of repos){
+        console.log(repo['name']);
+        var repoElement = document.createElement('li');
+        var repoText = document.createTextNode(repo['name']);
+        repoElement.appendChild(repoText);
+        listElement.appendChild(repoElement);
+    }
 }
 
 
-checaIdade(17)
+function buscarUsuario(){
+    var usuario = inputElement.value;
+    inputElement.value='';
+
+    axios.get('https://api.github.com/users/'+usuario+'/repos')
     .then(function(response) {
-        console.log("Maior que 18");
+        repos = response['data'];
+        renderRepos();
     })
     .catch(function(error) {
-        console.warn("Menor que 18");
+        console.warn(error);
     });
+
+}
+    
+buttonElement.onclick = buscarUsuario;
+    
