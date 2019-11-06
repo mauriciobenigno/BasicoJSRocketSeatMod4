@@ -19,14 +19,16 @@ function renderRepos(){
 function buscarUsuario(){
     var usuario = inputElement.value;
     inputElement.value='';
-
+    repos.push('Carregando...');
+    renderRepos();
     axios.get('https://api.github.com/users/'+usuario+'/repos')
     .then(function(response) {
         repos = response['data'];
         renderRepos();
     })
     .catch(function(error) {
-        console.warn(error);
+        repos.push('Erro ao buscar o usuário '+usuario+'...');
+        renderRepos();
     });
 
 }
